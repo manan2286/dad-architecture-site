@@ -1,236 +1,237 @@
 
-export default function Home() {
+
+// app/page.tsx
+import Link from "next/link";
+import HeroSlideshow from "./components/HeroSlideshow";
+import Container from "./components/Container";
+import Section from "./components/Section";
+import FreeDesignCTA from "./components/FreeDesignCTA";
+
+/* =========================
+   HERO SPLIT BLUE BACKGROUND
+   (height clipped to match hero/image)
+========================= */
+function HeroSplitBlueTint() {
   return (
-    <main className="min-h-screen bg-[#070A0F] text-white">
-      {/* ================= BACKGROUND ================= */}
-      <section className="relative min-h-screen overflow-hidden">
-        {/* Background image */}
-        <div
-          className="absolute inset-0 bg-center bg-cover scale-[1.03]"
-          style={{ backgroundImage: "url('/hero.jpg')" }}
-        />
-        {/* Dark overlays */}
-        <div className="absolute inset-0 bg-black/60" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/70" />
+    <div
+      aria-hidden
+      className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[520px] overflow-hidden md:h-full"
+    >
+      {/* Exact 50/50 split */}
+      <div className="absolute inset-y-0 left-0 w-1/2 bg-blue-900/45" />
+      <div className="absolute inset-y-0 right-0 w-1/2 bg-blue-500/22" />
 
-        {/* ================= STICKY NAV ================= */}
-        <div className="sticky top-0 z-50">
-          <div className="backdrop-blur-md bg-black/35 border-b border-white/10">
-            <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-              <div className="font-semibold tracking-wide">
-                Khanna Architects
+      {/* Soft wash */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white/5 via-white/25 to-white/55" />
+
+      {/* Subtle glow accents */}
+      <div className="absolute -left-24 top-10 h-72 w-72 rounded-full bg-blue-700/18 blur-3xl" />
+      <div className="absolute -right-24 top-24 h-72 w-72 rounded-full bg-blue-500/16 blur-3xl" />
+    </div>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <main className="bg-white">
+      {/* HERO (Utley-style) */}
+      <section className="relative isolate overflow-hidden border-b border-black/10">
+        <HeroSplitBlueTint />
+
+        <div className="relative z-10">
+          <Container>
+            <div className="grid items-stretch gap-10 py-14 md:grid-cols-2 md:py-20">
+              {/* LEFT */}
+              <div className="flex flex-col justify-center">
+                <p className="text-xs font-semibold tracking-widest text-blue-700">
+                  KHANNA ARCHITECTS • DELHI, INDIA
+                </p>
+
+                <h1 className="mt-4 text-4xl font-semibold tracking-tight text-black md:text-5xl">
+                  Timeless architecture,
+                  <span className="text-blue-700"> designed to last</span>.
+                </h1>
+
+                <p className="mt-5 max-w-xl text-base text-black/70">
+                  40+ years of experience across planning, residential, commercial,
+                  and wellness projects—balancing functionality, elegance, and
+                  buildability.
+                </p>
+
+                <div className="mt-7 flex flex-wrap gap-3">
+                  <Link
+                    href="/projects"
+                    className="rounded-full bg-blue-700 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:opacity-95"
+                  >
+                    View Projects
+                  </Link>
+
+                  <a
+                    href="#contact"
+                    className="rounded-full border border-black/15 bg-white/70 px-5 py-2.5 text-sm font-medium text-black shadow-sm backdrop-blur transition hover:border-blue-700/30"
+                  >
+                    Contact
+                  </a>
+                </div>
+
+                {/* Mini stats */}
+                <div className="mt-10 grid max-w-xl grid-cols-3 gap-3 text-sm">
+                  <div className="rounded-2xl border border-black/10 bg-white/70 p-4 backdrop-blur">
+                    <div className="text-lg font-semibold text-black">40+</div>
+                    <div className="text-black/60">Years</div>
+                  </div>
+                  <div className="rounded-2xl border border-black/10 bg-white/70 p-4 backdrop-blur">
+                    <div className="text-lg font-semibold text-black">Planning</div>
+                    <div className="text-black/60">to Execution</div>
+                  </div>
+                  <div className="rounded-2xl border border-black/10 bg-white/70 p-4 backdrop-blur">
+                    <div className="text-lg font-semibold text-black">Trusted</div>
+                    <div className="text-black/60">Practice</div>
+                  </div>
+                </div>
               </div>
 
-              <nav className="hidden md:flex gap-7 text-sm text-white/80">
-                <a href="#work" className="hover:text-white transition">
-                  Works
-                </a>
-                <a href="#services" className="hover:text-white transition">
-                  Services
-                </a>
-                <a href="#contact" className="hover:text-white transition">
-                  Contact
-                </a>
-              </nav>
+              {/* RIGHT (image size unchanged) */}
+              <div className="relative self-stretch">
+                <div className="absolute inset-0 overflow-hidden rounded-3xl border border-black/10 bg-white shadow-sm">
+                  <HeroSlideshow
+                    intervalMs={5000}
+                    images={[
+                      "/images/hero.jpg",
+                      "/images/medicity.jpg",
+                      "/images/care-homes.jpg",
+                      "/images/spice-mall-multiplex.jpg",
+                      "/images/nigeria-seafront-housing.jpg",
+                    ]}
+                  />
+                </div>
 
-              <a
-                href="#contact"
-                className="hidden md:inline-flex rounded-lg bg-red-600 px-4 py-2 text-sm font-medium hover:bg-red-500 transition"
-              >
-                Request a quote
-              </a>
+                {/* Height anchor (controls hero height on small screens) */}
+                <div aria-hidden className="h-[520px] md:h-full" />
+              </div>
             </div>
-          </div>
+          </Container>
         </div>
+      </section>
 
-        {/* ================= CONTENT ================= */}
-        <div className="relative z-10 max-w-6xl mx-auto px-6 pt-10 pb-10">
-          {/* ================= HERO CARD ================= */}
-          <div className="mt-10 md:mt-16">
-            {/* Outer white frame */}
-            <div className="rounded-[44px] p-[10px] bg-white/90 shadow-[0_0_0_1px_rgba(255,255,255,0.15),0_20px_80px_rgba(0,0,0,0.65)]">
-              {/* Glow ring */}
-              <div className="rounded-[38px] p-[2px] bg-gradient-to-br from-white/70 via-white/30 to-white/10">
-                {/* Inner DARK glass card */}
-                <div className="rounded-[36px] bg-gradient-to-b from-black/60 via-black/50 to-black/65 border border-white/15 backdrop-blur-xl overflow-hidden">
-                  <div className="px-8 py-12 md:px-14 md:py-16">
-                    <h1 className="text-4xl md:text-6xl font-semibold leading-tight drop-shadow-[0_10px_24px_rgba(0,0,0,0.65)]">
-                      Architecture, Interior
-                      <br /> & Exterior Design
-                    </h1>
-
-                    <p className="mt-5 text-white/90 max-w-2xl drop-shadow-[0_6px_18px_rgba(0,0,0,0.6)]">
-                      A dedicated team of designers and architects to implement
-                      your project with clarity, quality, and timeless
-                      aesthetics.
-                    </p>
-
-                    {/* Buttons */}
-                    <div className="mt-9 flex flex-wrap gap-4">
-                      <a
-                        href="#contact"
-                        className="inline-flex items-center justify-center rounded-lg bg-red-600 px-7 py-3 font-medium hover:bg-red-500 transition shadow-[0_14px_35px_rgba(220,38,38,0.4)]"
-                      >
-                        Request a quote
-                      </a>
-
-                      <a
-                        href="#services"
-                        className="inline-flex items-center justify-center rounded-lg border border-white/40 bg-white/5 px-7 py-3 font-medium text-white/95 hover:bg-white/10 transition"
-                      >
-                        Learn more
-                      </a>
-                    </div>
-
-                    <div className="mt-6 text-sm text-white/85 drop-shadow-[0_6px_18px_rgba(0,0,0,0.6)]">
-                      Delhi, India · 40+ years of experience
-                    </div>
-                  </div>
-                </div>
-              </div>
+      {/* ABOUT */}
+      <Section
+        id="about"
+        eyebrow="ABOUT"
+        title="A legacy of thoughtful design"
+        subtitle="We focus on clean lines, pragmatic planning, and spaces that feel calm, functional, and premium."
+      >
+        <div className="grid gap-6 md:grid-cols-3">
+          {[
+            {
+              title: "Planning-first",
+              desc: "Layouts that work in real life—circulation, light, and proportions considered early.",
+            },
+            {
+              title: "Buildable details",
+              desc: "Design decisions guided by execution reality and long-term maintenance.",
+            },
+            {
+              title: "Client clarity",
+              desc: "Clear drawings, transparent decisions, and confidence through every stage.",
+            },
+          ].map((c) => (
+            <div
+              key={c.title}
+              className="rounded-3xl border border-black/10 bg-white/70 p-6 shadow-sm backdrop-blur"
+            >
+              <h3 className="text-base font-semibold text-black">{c.title}</h3>
+              <p className="mt-2 text-sm text-black/70">{c.desc}</p>
             </div>
-          </div>
+          ))}
+        </div>
+      </Section>
 
-          {/* ================= WORKS ================= */}
-          <div
-            id="work"
-            className="mt-12 md:mt-16 rounded-[44px] bg-white text-[#111] shadow-[0_25px_80px_rgba(0,0,0,0.55)] overflow-hidden"
-          >
-            <div className="px-8 py-12 md:px-14 md:py-14">
-              <div className="text-center">
-                <div className="text-xs tracking-widest text-gray-500 uppercase">
-                  Get Inspired
-                </div>
-                <h2 className="mt-2 text-3xl md:text-4xl font-semibold">
-                  See Our Latest Works
-                </h2>
-              </div>
-
-              <div className="mt-10 grid md:grid-cols-3 gap-6">
-                {/* Project 1 */}
-                <div className="rounded-3xl border border-gray-200 overflow-hidden hover:shadow-lg transition">
-                  <div className="relative h-48">
-                    <img
-                      src="/hero.jpg"
-                      alt="Wellness Centre Rishikesh"
-                      className="h-full w-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent" />
-                    <div className="absolute bottom-3 left-4 right-4">
-                      <div className="text-xs text-white/85">
-                        Featured Project
-                      </div>
-                      <div className="text-white font-semibold">
-                        Wellness Centre, Rishikesh
-                      </div>
-                    </div>
-                  </div>
-                  <div className="p-5 text-sm text-gray-600">
-                    Contemporary façade with glass curvature and stone massing.
-                  </div>
-                </div>
-
-                {/* Project 2 */}
-                <div className="rounded-3xl border border-gray-200 p-6">
-                  <div className="text-sm text-gray-500">Residential</div>
-                  <div className="mt-1 font-semibold">
-                    Luxury Villa · South Delhi
-                  </div>
-                  <div className="mt-2 text-sm text-gray-600">
-                    Natural light, ventilation, and privacy-focused planning.
-                  </div>
-                </div>
-
-                {/* Project 3 */}
-                <div className="rounded-3xl border border-gray-200 p-6">
-                  <div className="text-sm text-gray-500">Commercial</div>
-                  <div className="mt-1 font-semibold">
-                    Office Building · Gurgaon
-                  </div>
-                  <div className="mt-2 text-sm text-gray-600">
-                    Efficient floor plates with modern elevations.
-                  </div>
-                </div>
-              </div>
+      {/* SERVICES */}
+      <Section
+        id="services"
+        eyebrow="SERVICES"
+        title="What we do"
+        subtitle="End-to-end support—from master planning to detailed design and coordination."
+      >
+        <div className="grid gap-4 md:grid-cols-2">
+          {[
+            "Architecture Design",
+            "Urban / Master Planning",
+            "Residential & Commercial Projects",
+            "Interiors Coordination",
+            "Site/Execution Support",
+            "Consultation & Reviews",
+          ].map((s) => (
+            <div
+              key={s}
+              className="flex items-center justify-between rounded-2xl border border-black/10 bg-white/70 p-5 shadow-sm backdrop-blur"
+            >
+              <span className="text-sm font-medium text-black">{s}</span>
+              <span className="text-sm text-blue-700">→</span>
             </div>
-          </div>
+          ))}
+        </div>
+      </Section>
 
-          {/* ================= SERVICES ================= */}
-          <div
-            id="services"
-            className="mt-12 md:mt-16 rounded-[44px] border border-white/10 bg-white/10 backdrop-blur-xl shadow-[0_25px_80px_rgba(0,0,0,0.6)] overflow-hidden"
-          >
-            <div className="px-8 py-12 md:px-14 md:py-14">
-              <h3 className="text-2xl md:text-3xl font-semibold">Services</h3>
+      {/* ✅ FREE DESIGN INITIATIVE (Option C) */}
+      <FreeDesignCTA />
 
-              <div className="mt-8 grid md:grid-cols-3 gap-6">
-                <div className="rounded-3xl bg-black/30 border border-white/10 p-6">
-                  <div className="font-semibold">Architecture</div>
-                  <div className="mt-2 text-sm text-white/80">
-                    Residential, commercial & institutional projects.
+      {/* CONTACT */}
+      <section
+        id="contact"
+        className="relative isolate overflow-hidden border-t border-black/10"
+      >
+        <HeroSplitBlueTint />
+
+        <div className="relative z-10">
+          <Container>
+            <div className="py-14 md:py-20">
+              <p className="text-xs font-semibold tracking-widest text-blue-700">
+                CONTACT
+              </p>
+              <h2 className="mt-3 text-2xl font-semibold tracking-tight text-black md:text-3xl">
+                Let’s discuss your project
+              </h2>
+              <p className="mt-3 max-w-2xl text-sm text-black/70">
+                Share your requirement and timeline. We’ll respond with next steps
+                and an initial direction.
+              </p>
+
+              <div className="mt-8 grid gap-4 md:grid-cols-3">
+                <div className="rounded-3xl border border-black/10 bg-white/75 p-6 shadow-sm backdrop-blur">
+                  <div className="text-xs font-semibold tracking-widest text-black/60">
+                    PHONE / WHATSAPP
                   </div>
-                </div>
-
-                <div className="rounded-3xl bg-black/30 border border-white/10 p-6">
-                  <div className="font-semibold">Interior Design</div>
-                  <div className="mt-2 text-sm text-white/80">
-                    Space planning, materials, and turnkey interiors.
-                  </div>
-                </div>
-
-                <div className="rounded-3xl bg-black/30 border border-white/10 p-6">
-                  <div className="font-semibold">Exterior & Façade</div>
-                  <div className="mt-2 text-sm text-white/80">
-                    Elevation design and façade detailing.
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* ================= CONTACT ================= */}
-          <div
-            id="contact"
-            className="mt-12 md:mt-16 rounded-[44px] bg-white text-[#111] shadow-[0_25px_80px_rgba(0,0,0,0.55)] overflow-hidden"
-          >
-            <div className="px-8 py-12 md:px-14 md:py-14">
-              <h3 className="text-2xl md:text-3xl font-semibold">Contact</h3>
-
-              <div className="mt-6 grid md:grid-cols-2 gap-6">
-                <div className="rounded-3xl border border-gray-200 p-6">
-                  <div className="text-sm text-gray-500">Phone / WhatsApp</div>
-                  <div className="mt-1 font-semibold text-lg">
+                  <div className="mt-2 text-sm font-medium text-black">
                     +91 9810039775
                   </div>
                 </div>
 
-                <div className="rounded-3xl border border-gray-200 p-6">
-                  <div className="text-sm text-gray-500">Email</div>
-                  <div className="mt-1 font-semibold text-lg">
-                    contactskhanna@yahoo.com
+                <div className="rounded-3xl border border-black/10 bg-white/75 p-6 shadow-sm backdrop-blur">
+                  <div className="text-xs font-semibold tracking-widest text-black/60">
+                    EMAIL
+                  </div>
+                  <div className="mt-2 text-sm font-medium text-black">
+                    Contactskhanna@yahoo.com
+                  </div>
+                </div>
+
+                <div className="rounded-3xl border border-black/10 bg-white/75 p-6 shadow-sm backdrop-blur">
+                  <div className="text-xs font-semibold tracking-widest text-black/60">
+                    LOCATION
+                  </div>
+                  <div className="mt-2 text-sm font-medium text-black">
+                    Delhi, India
                   </div>
                 </div>
               </div>
 
-              <div className="mt-6 text-sm text-gray-600">
-                Location: Delhi, India
+              <div className="mt-10 text-xs text-black/55">
+                © {new Date().getFullYear()} Khanna Architects. All rights reserved.
               </div>
             </div>
-          </div>
-
-          {/* WhatsApp floating */}
-          <a
-            href="https://wa.me/919810039775"
-            target="_blank"
-            rel="noreferrer"
-            className="fixed bottom-6 right-6 z-50 rounded-full bg-green-600 px-5 py-3 text-sm font-semibold shadow-[0_18px_45px_rgba(0,0,0,0.5)] hover:bg-green-500 transition"
-          >
-            WhatsApp
-          </a>
-
-          <footer className="mt-10 pb-8 text-center text-white/60 text-sm">
-            © {new Date().getFullYear()} Khanna Architects. All rights reserved.
-          </footer>
+          </Container>
         </div>
       </section>
     </main>

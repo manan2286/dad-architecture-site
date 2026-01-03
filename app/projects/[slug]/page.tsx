@@ -1,127 +1,234 @@
+
+"use client";
+
+import Image from "next/image";
 import Link from "next/link";
-import { getProject } from "../../lib/projects";
+import { useParams } from "next/navigation";
+import { projects } from "../../lib/projects";
 
-export default function ProjectDetailPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const project = getProject(params.slug);
+function findProjectBySlug(slug: string) {
+  return projects.find((p) => p.slug === slug);
+}
 
-  // If project not found, show a friendly message instead of hard 404
+export default function ProjectDetailPage() {
+  const params = useParams();
+  const slug = typeof params?.slug === "string" ? params.slug : "";
+  const project = findProjectBySlug(slug);
+
   if (!project) {
     return (
-      <main className="min-h-screen bg-[#070A0F] text-white px-6 py-12">
-        <div className="max-w-3xl mx-auto">
-          <h1 className="text-3xl font-semibold">Project not found</h1>
-          <p className="mt-3 text-white/75">
-            The slug <span className="text-white">{params.slug}</span> does not
-            match any project in <code>app/lib/projects.ts</code>.
-          </p>
-
-          <Link
-            href="/projects"
-            className="inline-block mt-6 rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-sm hover:bg-white/10 transition"
-          >
-            ← Back to Projects
-          </Link>
-        </div>
+      <main className="mx-auto max-w-6xl px-6 py-16">
+        <h1 className="text-2xl font-semibold">Project not found</h1>
+        <p className="mt-3 text-black/70">
+          The project you’re looking for doesn’t exist.
+        </p>
+        <Link
+          href="/projects"
+          className="mt-6 inline-block rounded-full bg-blue-700 px-5 py-2.5 text-sm font-medium text-white"
+        >
+          Back to Projects
+        </Link>
       </main>
     );
   }
 
+  // Next project logic (kept)
+  const currentIndex = projects.findIndex((p) => p.slug === slug);
+  const nextProject =
+    currentIndex >= 0 && projects.length > 1
+      ? projects[(currentIndex + 1) % projects.length]
+      : null;
+
+  // Fields used in the Project Details box (kept)
+  const location = project.location ?? "—";
+  const siteArea = (project as any).siteArea ?? (project as any).site_area ?? "—";
+  const builtUpArea =
+    (project as any).builtUpArea ?? (project as any).built_up_area ?? "—";
+  const status = project.status ?? "—";
+
+  const overview =
+    (project as any).overview ??
+    project.description ??
+    "This project was designed with a focus on practical circulation, clean proportions, and a build-ready approach that aligns stakeholders early.";
+
+  const overview2 =
+    (project as any).overview2 ??
+    "We emphasize clarity in drawings, site coordination, and details that translate smoothly from concept to execution—reducing rework and accelerating decisions.";
+
   return (
-    <main className="min-h-screen bg-[#070A0F] text-white">
-      <div className="max-w-6xl mx-auto px-6 pt-10">
-        <div className="flex items-center justify-between gap-6 flex-wrap">
-          <div>
-            <div className="text-sm text-white/70">
-              {project.category} · {project.location}
-            </div>
-            <h1 className="mt-2 text-3xl md:text-5xl font-semibold">
-              {project.title}
-            </h1>
-          </div>
+    <main className="bg-white">
+      {/* Top header row */}
+      <section className="border-b border-black/10">
+        <div className="mx-auto max-w-6xl px-6 py-6">
+          <div className="flex items-center justify-between">
+            {/* Back to Projects */}
+            <Link
+              href="/projects"
+              className="inline-flex items-center gap-3 text-sm font-medium text-black hover:opacity-80"
+            >
+              <span className="grid grid-cols-3 gap-[2px]">
+                {Array.from({ length: 9 }).map((_, i) => (
+                  <span key={i} className="h-1 w-1 rounded-[2px] bg-black" />
+                ))}
+              </span>
+              <span>Back to Projects</span>
+            </Link>
 
-          <Link
-            href="/projects"
-            className="rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-sm hover:bg-white/10 transition"
-          >
-            ← All Projects
-          </Link>
-        </div>
-      </div>
-
-      <div className="max-w-6xl mx-auto px-6 mt-8 pb-12">
-        <div className="rounded-[36px] overflow-hidden border border-white/10 bg-white/10 backdrop-blur-xl">
-          <div className="relative h-[260px] md:h-[420px] bg-black/40">
-            {project.heroImage ? (
-              <img
-                src={project.heroImage}
-                alt={project.title}
-                className="h-full w-full object-cover"
-              />
-            ) : null}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-            <div className="absolute bottom-5 left-6 right-6">
-              <p className="text-white/90 max-w-3xl">{project.summary}</p>
-            </div>
-          </div>
-
-          <div className="p-7 md:p-10">
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="md:col-span-2 rounded-3xl border border-white/10 bg-black/25 p-6">
-                <h2 className="text-xl font-semibold">Highlights</h2>
-                <ul className="mt-4 space-y-2 text-white/80">
-                  {project.highlights.map((h) => (
-                    <li key={h} className="flex gap-3">
-                      <span className="mt-[6px] h-2 w-2 rounded-full bg-red-500 shrink-0" />
-                      <span>{h}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="rounded-3xl border border-white/10 bg-black/25 p-6">
-                <h2 className="text-xl font-semibold">Scope of Work</h2>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {project.scope.map((s) => (
-                    <span
-                      key={s}
-                      className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-sm text-white/80"
-                    >
-                      {s}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-8 rounded-3xl border border-white/10 bg-white/10 p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-              <div>
-                <div className="text-lg font-semibold">
-                  Interested in a similar project?
-                </div>
-                <div className="text-sm text-white/75 mt-1">
-                  Contact Khanna Architects for architecture, interior, and
-                  façade design services.
-                </div>
-              </div>
-              <a
-                href="mailto:contactskhanna@yahoo.com"
-                className="rounded-lg bg-red-600 px-5 py-3 text-sm font-medium hover:bg-red-500 transition"
+            {/* Next project (working) */}
+            {nextProject ? (
+              <Link
+                href={`/projects/${nextProject.slug}`}
+                className="inline-flex items-center gap-3 text-sm font-medium text-black hover:opacity-80"
+                title={`Next: ${nextProject.title}`}
               >
-                Email for Quote
+                <span>Next project</span>
+                <span className="grid grid-cols-3 gap-[2px]">
+                  {Array.from({ length: 9 }).map((_, i) => (
+                    <span key={i} className="h-1 w-1 rounded-[2px] bg-black" />
+                  ))}
+                </span>
+              </Link>
+            ) : (
+              <span className="text-sm font-medium text-black/40">
+                Next project
+              </span>
+            )}
+          </div>
+
+          <h1 className="mt-6 text-3xl font-semibold tracking-tight text-black md:text-4xl">
+            {project.title}
+          </h1>
+          {project.subtitle ? (
+            <p className="mt-2 text-sm text-black/60">{project.subtitle}</p>
+          ) : null}
+        </div>
+      </section>
+
+      {/* HERO: Overview (left) + Image (right) */}
+      <section className="mx-auto max-w-6xl px-6 py-8">
+        <div className="grid gap-8 md:grid-cols-2">
+          {/* LEFT: Overview moved here */}
+          <div className="md:pt-2">
+            <h2 className="text-2xl font-semibold tracking-tight text-black">
+              Overview
+            </h2>
+            <p className="mt-5 text-black/70">{overview}</p>
+            <p className="mt-6 text-black/70">{overview2}</p>
+
+            {/* Buttons moved below Overview */}
+            <div className="mt-8 flex gap-4">
+              <a
+                href="#gallery"
+                className="rounded-full bg-black px-6 py-3 text-sm font-semibold text-white shadow-sm hover:opacity-95"
+              >
+                View Gallery
+              </a>
+              <a
+                href="#details"
+                className="rounded-full border border-black/15 bg-white px-6 py-3 text-sm font-semibold text-black shadow-sm hover:border-blue-700/30"
+              >
+                Project Details
               </a>
             </div>
           </div>
-        </div>
 
-        <footer className="mt-10 text-center text-white/60 text-sm">
-          © {new Date().getFullYear()} Khanna Architects. All rights reserved.
-        </footer>
-      </div>
+          {/* RIGHT: Hero image */}
+          <div className="relative overflow-hidden rounded-3xl border border-black/10 bg-white shadow-sm">
+            <div className="relative aspect-[16/10]">
+              <Image
+                src={project.heroImage}
+                alt={project.title}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
+                priority
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Details card (unchanged) */}
+      <section className="mx-auto max-w-6xl px-6 pb-16 pt-6">
+        <div className="grid gap-10 md:grid-cols-2">
+          {/* Left column intentionally empty now (keeps spacing consistent on desktop) */}
+          <div />
+
+          {/* Project Details */}
+          <div id="details" className="md:pt-2">
+            <div className="rounded-3xl border border-black/10 bg-white p-6 shadow-sm">
+              <h3 className="text-lg font-semibold text-black">Project Details</h3>
+
+              <div className="mt-4 space-y-3 text-sm">
+                <div className="flex items-center justify-between border-b border-black/5 pb-2">
+                  <span className="text-black/60">Location</span>
+                  <span className="font-medium text-black">{location}</span>
+                </div>
+
+                <div className="flex items-center justify-between border-b border-black/5 pb-2">
+                  <span className="text-black/60">Site Area</span>
+                  <span className="font-medium text-black">{siteArea}</span>
+                </div>
+
+                <div className="flex items-center justify-between border-b border-black/5 pb-2">
+                  <span className="text-black/60">Built-Up Area</span>
+                  <span className="font-medium text-black">{builtUpArea}</span>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="text-black/60">Status</span>
+                  <span className="font-medium text-black">{status}</span>
+                </div>
+
+                {/* WhatsApp CTA */}
+                <div className="mt-6 rounded-2xl border border-black/10 bg-black/[0.02] p-5">
+                  <p className="text-sm font-semibold text-black">
+                    Want a similar design?
+                  </p>
+                  <p className="mt-2 text-sm text-black/70">
+                    Share your site location, plot size (if known), and timeline on WhatsApp.
+                  </p>
+
+                  <a
+                    href="https://wa.me/919810039775"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-4 inline-flex text-sm font-semibold text-blue-700 hover:text-blue-800"
+                  >
+                    Message on WhatsApp →
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Gallery (unchanged) */}
+      <section id="gallery" className="mx-auto max-w-6xl px-6 pb-20">
+        <h2 className="text-2xl font-semibold tracking-tight text-black">
+          Gallery
+        </h2>
+
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {(project.gallery ?? []).map((src: string) => (
+            <div
+              key={src}
+              className="relative overflow-hidden rounded-3xl border border-black/10 bg-white shadow-sm"
+            >
+              <div className="relative aspect-[4/3]">
+                <Image
+                  src={src}
+                  alt={`${project.title} gallery`}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
     </main>
   );
 }
-

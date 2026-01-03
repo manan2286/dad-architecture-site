@@ -1,0 +1,28 @@
+
+export const metadata = { title: "About | Khanna Architects" };
+
+export default function AboutPage() {
+  return (
+    <div className="mx-auto max-w-6xl px-4 py-14">
+      <h1 className="text-3xl font-semibold md:text-4xl">About</h1>
+      <p className="mt-4 max-w-3xl text-white/75">
+        Khanna Architects is a Delhi-based practice with 40+ years of experience.
+        We focus on practical, buildable design—strong drawings, clean details, and
+        steady execution support.
+      </p>
+
+      <div className="mt-10 grid gap-4 md:grid-cols-3">
+        {[
+          { t: "Approach", d: "Simple forms, strong proportions, and functional planning." },
+          { t: "Process", d: "Concept → drawings → coordination → execution support." },
+          { t: "Outcome", d: "Spaces that feel calm, durable, and timeless." },
+        ].map((c) => (
+          <div key={c.t} className="rounded-2xl border border-white/10 bg-white/5 p-6">
+            <div className="text-lg font-semibold">{c.t}</div>
+            <div className="mt-2 text-sm text-white/70">{c.d}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
